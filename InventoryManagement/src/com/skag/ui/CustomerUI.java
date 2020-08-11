@@ -1,6 +1,10 @@
 package com.skag.ui;
 
 import javax.swing.*;
+
+import com.skag.backend.Customer;
+import com.skag.backend.Product;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,11 +21,9 @@ class CustomerFrame extends JFrame implements ActionListener {
     JTextField customerContactField=new JTextField();
 
     JButton insertButton=new JButton("INSERT");
-    //JButton editButton=new JButton("EDIT");
-    //JButton deleteButton=new JButton("DELETE");
+    JButton editButton=new JButton("EDIT");
+    JButton deleteButton=new JButton("DELETE");
     
-
-
     CustomerFrame()
     {
        //Calling methods inside constructor.
@@ -46,9 +48,9 @@ class CustomerFrame extends JFrame implements ActionListener {
        customerAdressField.setBounds(150,220,150,30);
        customerContactField.setBounds(150,290,150,30);
 
-       insertButton.setBounds(50,370,100,30);
-       //editButton.setBounds(50,300,100,30);
-       //deleteButton.setBounds(50,300,100,30);
+       insertButton.setBounds(50,350,100,30);
+       editButton.setBounds(200,350,100,30);
+       deleteButton.setBounds(350,350,100,30);
 
    }
    public void addComponentsToContainer()
@@ -60,24 +62,52 @@ class CustomerFrame extends JFrame implements ActionListener {
        container.add(customerNameTextField);
        container.add(customerAdressField);
        container.add(customerContactField);
+       
        container.add(insertButton);
-       //container.add(editButton);
-       //container.add(deleteButton);
+       container.add(editButton);
+       container.add(deleteButton);
    }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-    	System.out.println("Button pressed");
+    	Customer cust= new Customer();
+    	if("INSERT".equals(e.getActionCommand())) {    		
+    		cust.setName(customerNameTextField.getText());
+    		cust.setAddress(customerAdressField.getText());
+    		cust.setContact(Integer.parseInt((customerContactField.getText())));
+    		int ret = cust.addCustomer();
+    		if (ret == 1)
+    			JOptionPane.showMessageDialog(this, "Customer Added!");
+    		else 
+    			JOptionPane.showMessageDialog(this, "Error in Customer Addition!");
+    		
+    	} else if ("MODIFY".equals(e.getActionCommand())) {
+    		cust.setName(customerNameTextField.getText());
+    		cust.setAddress(customerAdressField.getText());
+    		cust.setContact(Integer.parseInt(customerContactField.getText()));
+    		int ret = cust.modCustomer();
+    		if (ret == 1)
+    			JOptionPane.showMessageDialog(this, "Customer details Modified!");
+    		else 
+    			JOptionPane.showMessageDialog(this, "Error in Customer detail Modification!");
+    	}else {
+/*    		cust.setId((customerNameTextField.getText()));
+    		int ret = cust.delCustomer();
+    		if (ret == 1)
+    			JOptionPane.showMessageDialog(this, "Customer Details Deleted!");
+    		else 
+    			JOptionPane.showMessageDialog(this, "Error in Customer Details Deletion!");*/
+    	}
     }
 }
 
 public class CustomerUI {
     public static void main(String[] a){
     	CustomerFrame frame=new CustomerFrame();
-        frame.setTitle("Customer Insert");
+        frame.setTitle("Customer");
         frame.setVisible(true);
-        frame.setBounds(10,10,600,700);
+        frame.setBounds(10,10,500,600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 

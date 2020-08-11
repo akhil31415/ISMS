@@ -15,14 +15,17 @@ import com.skag.backend.Product;
 class ProductFrame extends JFrame implements ActionListener {
 
     Container container=getContentPane();
+    JLabel prodctIdlabel=new JLabel("Product ID");
     JLabel productNameLabel=new JLabel("Product Name");
     JLabel productPriceLabel=new JLabel("Product Price");
+    JTextField prodctIdField=new JTextField();
     JTextField productNameTextField=new JTextField();
     JTextField productPriceField=new JTextField();
+    
     JButton insertButton=new JButton("INSERT");
     JButton editButton=new JButton("EDIT");
     JButton deleteButton=new JButton("DELETE");
-
+    JButton returnButton=new JButton("To Dashboard");
     ProductFrame()
     {
        //Calling methods inside constructor.
@@ -45,7 +48,7 @@ class ProductFrame extends JFrame implements ActionListener {
        insertButton.setBounds(50,300,100,30);
        editButton.setBounds(50,300,150,30);
        deleteButton.setBounds(50,300,200,30);
-
+       returnButton.setBounds(100, 400, 150, 30);
    }
    public void addComponentsToContainer()
    {
@@ -55,8 +58,9 @@ class ProductFrame extends JFrame implements ActionListener {
        container.add(productNameTextField);
        container.add(productPriceField);
        container.add(insertButton);
-       //container.add(editButton);
-       //container.add(deleteButton);
+       container.add(editButton);
+       container.add(deleteButton);
+       container.add(returnButton);
    }
 
 

@@ -14,8 +14,6 @@ class LoginFrame extends JFrame implements ActionListener {
 	JPasswordField passwordField = new JPasswordField();
 	JButton loginButton = new JButton("LOGIN");
 
-	// loginButton.addActionListener(this);
-
 	LoginFrame() {
 		// Calling methods inside constructor.
 		setLayoutManager();
@@ -35,7 +33,6 @@ class LoginFrame extends JFrame implements ActionListener {
 		userTextField.setBounds(150, 150, 150, 30);
 		passwordField.setBounds(150, 220, 150, 30);
 		loginButton.setBounds(50, 300, 100, 30);
-
 	}
 
 	public void addComponentsToContainer() {
@@ -60,7 +57,6 @@ class LoginFrame extends JFrame implements ActionListener {
 			d.setResizable(false);
 		} else
 			JOptionPane.showMessageDialog(this, "Invalid Credentials!");
-
 	}
 }
 
@@ -72,7 +68,5 @@ public class Login {
 		frame.setBounds(10, 10, 370, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-
 	}
-
 }

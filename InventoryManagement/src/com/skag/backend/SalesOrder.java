@@ -3,7 +3,7 @@ package com.skag.backend;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProductOrder {
+public class SalesOrder {
 	private int id;
 	private java.util.Date date;
 	private int quantity;
@@ -77,9 +77,9 @@ public class ProductOrder {
 		return new DBConnect().updtable(orderDel);
 	}
 
-	public static ProductOrder getOrder(int id) {
+	public static SalesOrder getOrder(int id) {
 
-		ProductOrder order = new ProductOrder();
+		SalesOrder order = new SalesOrder();
 		String prodsel = "SELECT * FROM ORDER WHERE ID=" + id;
 		ResultSet rs = new DBConnect().select(prodsel);
 		try {

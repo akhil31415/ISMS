@@ -43,30 +43,30 @@ class DashboardFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if ("Customer".equals(e.getActionCommand())){
+		if ("Customer".equals(e.getActionCommand())) {
 			this.dispose();
 			CustomerFrame c = new CustomerFrame();
-	        c.setTitle("Customer");
-	        c.setVisible(true);
-	        c.setBounds(10,10,600,700);
-	        c.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        c.setResizable(false);
-		}else if ("Product".equals(e.getActionCommand())){
+			c.setTitle("Customer");
+			c.setVisible(true);
+			c.setBounds(10, 10, 600, 700);
+			c.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			c.setResizable(false);
+		} else if ("Product".equals(e.getActionCommand())) {
 			this.dispose();
 			ProductFrame p = new ProductFrame();
-	        p.setTitle("Product");
-	        p.setVisible(true);
-	        p.setBounds(10,10,600,700);
-	        p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        p.setResizable(false);
-		}else {
+			p.setTitle("Product");
+			p.setVisible(true);
+			p.setBounds(10, 10, 600, 700);
+			p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			p.setResizable(false);
+		} else {
 			this.dispose();
-/*			ReportFrame p = new ReportFrame();
-	        p.setTitle("Report");
-	        p.setVisible(true);
-	        p.setBounds(10,10,600,700);
-	        p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        p.setResizable(false);*/
-		}				
+			ReportFrame p = new ReportFrame();
+			p.setTitle("Report");
+			p.setVisible(true);
+			p.setBounds(10, 10, 600, 700);
+			p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			p.setResizable(false);
+		}
 	}
 }
