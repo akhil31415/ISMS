@@ -39,8 +39,16 @@ public class Product {
 	}
 
 	public int modProd() {
-		String prodUpd = "UPDATE PRODUCT SET Name= " + "\'" + name + "\'" + ",  price= " + price + " WHERE ID="
-				+ getId();
+
+		String prodUpd = "UPDATE PRODUCT SET ";
+		if ((name != null && !"".equals(name)) && price != 0)
+			prodUpd = prodUpd + "Name= " + "\'" + name + "\'" + " , price= " + price;
+		else if (name != null && !"".equals(name))
+			prodUpd = prodUpd + "Name= " + "\'" + name + "\'";
+		else if (price != 0)
+			prodUpd = prodUpd + "price= " + price;
+
+		prodUpd = prodUpd + " WHERE ID=" + id;
 		return new DBConnect().updtable(prodUpd);
 	}
 

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class Customer {
 	private String name;
 	private String address;
-	private int contact;
+	private long contact;
 	private int id;
 
 	public int getId() {
@@ -33,11 +33,11 @@ public class Customer {
 		this.address = address;
 	}
 
-	public int getContact() {
+	public long getContact() {
 		return this.contact;
 	}
 
-	public void setContact(int contact) {
+	public void setContact(long contact) {
 		this.contact = contact;
 	}
 
@@ -49,8 +49,23 @@ public class Customer {
 	}
 
 	public int modCustomer() {
-		String custUpd = "UPDATE CUSTOMER SET Name= " + "\'" + name + "\'" + ",  Address= " + "\'" + address + "\'"
-				+ ", Contactno= " + contact + " WHERE ID=" + getId();
+		String custUpd = "UPDATE CUSTOMER SET ";
+		if ((name != null && !"".equals(name.trim())) && (address != null && !"".equals(address.trim())) && (contact !=0))
+			custUpd = custUpd + "Name= " + "\'" + name + "\'" + " , Address= " +  "\'" + address + "\'"+", Contactno= " + contact;
+		else if ((name != null && !"".equals(name.trim())) && (address != null && !"".equals(address.trim())))
+			custUpd = custUpd + "Name= " + "\'" + name + "\'" + " , Address= " +  "\'" + address+ "\'";
+		else if ((name != null && !"".equals(name.trim())) && (contact !=0))
+			custUpd = custUpd + "Name= " + "\'" + name + "\'" + ", Contactno= " + contact;
+		else if ((address != null && !"".equals(address.trim())) && (contact !=0))
+			custUpd = custUpd + "Address= " +  "\'" + address + "\'"+ ", Contactno= " + contact;
+		else if ((name != null && !"".equals(name.trim())))
+			custUpd = custUpd + "Name= " + "\'" + name + "\'";
+		else if ((address != null && !"".equals(address.trim())))
+			custUpd = custUpd + "Address= " +  "\'" + address+ "\'";
+		else if ((contact !=0))
+			custUpd = custUpd + "Contactno= " + contact;
+		
+		custUpd = custUpd + " WHERE ID=" + id;
 		return new DBConnect().updtable(custUpd);
 	}
 
@@ -69,8 +84,7 @@ public class Customer {
 				cust.setId(rs.getInt(1));
 				cust.setName(rs.getString(2));
 				cust.setAddress(rs.getString(3));
-				cust.setContact(rs.getInt(4));
-				
+				cust.setContact(rs.getLong(4));				
 			}				
 		} catch (SQLException e) {
 			e.printStackTrace();

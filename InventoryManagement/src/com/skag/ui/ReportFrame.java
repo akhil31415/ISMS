@@ -24,6 +24,7 @@ public class ReportFrame extends JFrame implements ActionListener {
 	JFormattedTextField endDateFld = new JFormattedTextField(format);*/
 
 	JButton genButton = new JButton("GENERATE");
+	JButton returnButton=new JButton("To Dashboard");
 	JRadioButton salesButton = new JRadioButton("Sales Report", true);
 	JRadioButton purchaseButton = new JRadioButton("Purchase Report", false);
 
@@ -33,6 +34,7 @@ public class ReportFrame extends JFrame implements ActionListener {
 		setLocationAndSize();
 		addComponentsToContainer();
 		genButton.addActionListener(this);
+		returnButton.addActionListener(this);
 		salesButton.addActionListener(this);
 		purchaseButton.addActionListener(this);
 	}
@@ -52,6 +54,7 @@ public class ReportFrame extends JFrame implements ActionListener {
 		salesButton.setBounds(50, 300, 100, 30);
 		purchaseButton.setBounds(150, 300, 150, 30);
 		genButton.setBounds(50, 350, 100, 30);
+		returnButton.setBounds(150, 350, 100, 30);
 	}
 
 	public void addComponentsToContainer() {
@@ -64,6 +67,7 @@ public class ReportFrame extends JFrame implements ActionListener {
 		container.add(salesButton);
 		container.add(purchaseButton);
 		container.add(genButton);
+		container.add(returnButton);
 	}
 
 	@Override
@@ -78,6 +82,14 @@ public class ReportFrame extends JFrame implements ActionListener {
 			ReportGeneration rp = new ReportGeneration();
 			//rp.process(salesButton.isSelected()?1:0, startDateFld.getText(), endDateFld.getText());
 			rp.process(salesButton.isSelected()?1:0, null, null);
-		}
+		}else if ("To Dashboard".equals(e.getActionCommand())){
+    		this.dispose();
+    		DashboardFrame df = new DashboardFrame();
+    		df.setTitle("Dashboard");
+			df.setVisible(true);
+			df.setBounds(10, 10, 600, 700);
+			df.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			df.setResizable(false);
+    	}
 	}
 }
