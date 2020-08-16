@@ -51,8 +51,12 @@ public class TestClass {
 		else
 			System.out.println("Error in Product update. Returned " + ret);	*/
 		
-		ReportGeneration rg= new ReportGeneration();
-		rg.process(0, null, null);
+/*		ReportGeneration rg= new ReportGeneration();
+		rg.process(0, null, null);*/
+		
+		SalesOrder s = new SalesOrder();
+		s.getOrder(0);
+		
 	}
 
 }

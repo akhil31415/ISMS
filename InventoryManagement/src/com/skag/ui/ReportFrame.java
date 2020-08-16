@@ -3,13 +3,9 @@ package com.skag.ui;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
 import com.skag.backend.ReportGeneration;
@@ -54,7 +50,7 @@ public class ReportFrame extends JFrame implements ActionListener {
 		salesButton.setBounds(50, 300, 100, 30);
 		purchaseButton.setBounds(150, 300, 150, 30);
 		genButton.setBounds(50, 350, 100, 30);
-		returnButton.setBounds(150, 350, 100, 30);
+		returnButton.setBounds(200, 350, 120, 30);
 	}
 
 	public void addComponentsToContainer() {

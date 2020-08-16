@@ -4,14 +4,18 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+
+import com.skag.backend.SalesOrder;
 
 class OrderFrame extends JFrame implements ActionListener {
 
@@ -25,15 +29,15 @@ class OrderFrame extends JFrame implements ActionListener {
 	JLabel customerIdlabel = new JLabel("Customer ID");
 	JLabel dateLabel = new JLabel("Date");
 	JLabel quantityLabel = new JLabel("Quantity");
-	JLabel priceLabel = new JLabel("Price");
+	// JLabel priceLabel = new JLabel("Price");
 
 	JTextField orderIDField = new JTextField();
 	JTextField productIDField = new JTextField();
 	JTextField customerIDTextField = new JTextField();
-	DateFormat format = new SimpleDateFormat("MM-dd-yyyy");
+	DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 	JFormattedTextField dateField = new JFormattedTextField(format);
 	JTextField quantityField = new JTextField();
-	JTextField priceField = new JTextField();
+	// JTextField priceField = new JTextField();
 
 	JRadioButton insertButton = new JRadioButton("INSERT", false);
 	JRadioButton editButton = new JRadioButton("EDIT", false);
@@ -76,8 +80,8 @@ class OrderFrame extends JFrame implements ActionListener {
 		quantityLabel.setBounds(50, 250, 100, 30);
 		quantityField.setBounds(150, 250, 50, 30);
 
-		priceLabel.setBounds(50, 300, 100, 30);
-		priceField.setBounds(150, 300, 100, 30);
+		// priceLabel.setBounds(50, 300, 100, 30);
+		// priceField.setBounds(150, 300, 100, 30);
 
 		customerIdlabel.setBounds(50, 350, 100, 30);
 		customerIDTextField.setBounds(150, 350, 50, 30);
@@ -100,14 +104,14 @@ class OrderFrame extends JFrame implements ActionListener {
 		container.add(customerIdlabel);
 		container.add(dateLabel);
 		container.add(quantityLabel);
-		container.add(priceLabel);
+		// container.add(priceLabel);
 
 		container.add(orderIDField);
 		container.add(productIDField);
 		container.add(customerIDTextField);
 		container.add(dateField);
 		container.add(quantityField);
-		container.add(priceField);
+		// container.add(priceField);
 
 		container.add(insertButton);
 		container.add(editButton);
@@ -124,19 +128,21 @@ class OrderFrame extends JFrame implements ActionListener {
 			deleteButton.setSelected(false);
 			orderIDField.setEditable(false);
 			productIDField.setEditable(true);
-			customerIDTextField.setEditable(true);
+			if (salesButton.isSelected())
+				customerIDTextField.setEditable(true);
 			dateField.setEditable(true);
 			quantityField.setEditable(true);
-			priceField.setEditable(true);
+			// priceField.setEditable(true);
 		} else if ("EDIT".equals(e.getActionCommand())) {
 			insertButton.setSelected(false);
 			deleteButton.setSelected(false);
 			orderIDField.setEditable(true);
 			productIDField.setEditable(true);
-			customerIDTextField.setEditable(true);
+			if (salesButton.isSelected())
+				customerIDTextField.setEditable(true);
 			dateField.setEditable(true);
 			quantityField.setEditable(true);
-			priceField.setEditable(true);
+			// priceField.setEditable(true);
 		} else if ("DELETE".equals(e.getActionCommand())) {
 			insertButton.setSelected(false);
 			editButton.setSelected(false);
@@ -145,7 +151,7 @@ class OrderFrame extends JFrame implements ActionListener {
 			customerIDTextField.setEditable(false);
 			dateField.setEditable(false);
 			quantityField.setEditable(false);
-			priceField.setEditable(false);
+			// priceField.setEditable(false);
 		} else if ("To Dashboard".equals(e.getActionCommand())) {
 			this.dispose();
 			DashboardFrame df = new DashboardFrame();
@@ -157,29 +163,211 @@ class OrderFrame extends JFrame implements ActionListener {
 		} else if ("Sales Order".equals(e.getActionCommand())) {
 			purchaseButton.setSelected(false);
 			salesButton.setSelected(true);
+			customerIDTextField.setEditable(true);
 		} else if ("Purchase Order".equals(e.getActionCommand())) {
 			salesButton.setSelected(false);
 			purchaseButton.setSelected(true);
+			customerIDTextField.setEditable(false);
 		} else {
 			// to confirm code
-			int action = -1;
+			int type = -1;
 			if (salesButton.isSelected())
-				action = 1;
+				type = 1;
 			else if (purchaseButton.isSelected())
-				action = 0;
-				if (validateIp(orderIDField.getText(), dateField.getText(), productIDField.getText(), priceField.getText(), quantityField.getText(), customerIdlabel.getText())!=0) {
-					//code after validation 
-				}else 
-					return;
-			
-
+				type = 0;
+			if (insertButton.isSelected()) {
+				if (valAdd(dateField.getText(), productIDField.getText(), quantityField.getText(),
+						customerIDTextField.getText()) != 1) {
+					try {
+						SalesOrder so = new SalesOrder();
+						so.setDate(dateField.getText());
+						so.setProdId(Integer.parseInt(productIDField.getText()));
+						so.setQuantity(Integer.parseInt(quantityField.getText()));
+						so.setCustId(Integer.parseInt(customerIDTextField.getText()));
+						so.setSalePurchase(type);
+						int ret = so.addOrder();
+						if (ret == 1) {
+							JOptionPane.showMessageDialog(this, "Order Added!");
+							wipeFrame();
+						} else
+							JOptionPane.showMessageDialog(this, "Error in Order Addition!");
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(this, "Error in Order Addition!");
+						e1.printStackTrace();
+					}
+				}
+			} else if (editButton.isSelected()) {
+				if (valMod(orderIDField.getText(), dateField.getText(), productIDField.getText(),
+						quantityField.getText(), customerIDTextField.getText()) != 1) {
+					try {
+						SalesOrder so = new SalesOrder();
+						so.setDate(dateField.getText());
+						so.setProdId(Integer.parseInt(productIDField.getText()));
+						so.setQuantity(Integer.parseInt(quantityField.getText()));
+						so.setCustId(Integer.parseInt(customerIDTextField.getText()));						
+						int ret = so.modOrder();
+						if (ret == 1) {
+							JOptionPane.showMessageDialog(this, "Order Modified!");
+							wipeFrame();
+						} else
+							JOptionPane.showMessageDialog(this, "Error in Order Modification!");
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(this, "Error in Order Modification!");
+						e1.printStackTrace();
+					}
+				}
+			} else if (deleteButton.isSelected()) {
+				if (valDel(orderIDField.getText()) != 1) {
+					try {
+						SalesOrder so = new SalesOrder();
+						so.setId(Integer.parseInt(orderIDField.getText()));
+						int ret = so.delOrder();
+						if (ret == 1) {
+							JOptionPane.showMessageDialog(this, "Order Deleted!");
+							wipeFrame();
+						} else
+							JOptionPane.showMessageDialog(this, "Error in Order Deletion!");
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(this, "Error in Order  Deletion!");
+						e1.printStackTrace();
+					}
+				}
+			} else
+				JOptionPane.showMessageDialog(this, "Please select one of the options!!");
 		}
 	}
-	
-	private int validateIp(String orderid, String orderDate, String productid, String price, String quant, String custid ) {
-		//validate the input parameters
-		
-		return 0;
+
+	private int valAdd(String orderDate, String productId, String quant, String customerId) {
+		// validate the input parameters
+		int retVal = 0;
+		try {
+			if (orderDate == null || "".equals(orderDate) || productId == null || "".equals(productId) || quant == null
+					|| "".equals(quant)) {
+				retVal = 1;
+				JOptionPane.showMessageDialog(this, "Please enter all the neccessary details !! ");
+				return retVal;
+			}
+			format.parse(orderDate);
+			int prodid = Integer.parseInt(productId);
+			int noOfItems = Integer.parseInt(quant);
+			if (prodid < 1 || noOfItems < 1) {
+				retVal = 1;
+				JOptionPane.showMessageDialog(this, "Please enter a valid numerical value greater than zero !! ");
+				return retVal;
+			}
+
+			if (salesButton.isSelected()) {
+				int custid = Integer.parseInt(customerId);
+				if (custid < 1) {
+					retVal = 1;
+					JOptionPane.showMessageDialog(this,
+							"Please enter a valid numerical value for customer ID field !! ");
+					return retVal;
+				}
+			}
+		} catch (NumberFormatException e) {
+			retVal = 1;
+			JOptionPane.showMessageDialog(this,
+					"Please enter a valid numerical value greater than zero for ID field !! ");
+			e.printStackTrace();
+		} catch (ParseException e) {
+			retVal = 1;
+			JOptionPane.showMessageDialog(this, "Please enter a valid Date value with format 'MM-dd-YYYY'!! ");
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+
+	private int valMod(String orderID, String orderDate, String productId, String quant, String customerId) {
+		int retVal = 0;
+		try {
+			if ((orderID == null || "".equals(orderID)) && (orderDate == null || "".equals(orderDate))
+					&& (productId == null || "".equals(productId)) && (quant == null || "".equals(quant))
+					&& ((customerId == null || "".equals(customerId) && salesButton.isSelected()))) {
+				retVal = 1;
+				JOptionPane.showMessageDialog(this, "Please enter all the neccessary details !! ");
+				return retVal;
+			}
+
+			int id = Integer.parseInt(orderID);
+			if (id < 1) {
+				retVal = 1;
+				JOptionPane.showMessageDialog(this,
+						"Please enter a valid numerical value greater than zero for order ID !! ");
+				return retVal;
+			}
+			if (orderDate != null) {
+				format.parse(orderDate);
+			}
+			if (productId != null && !"".equals(productId.trim())) {
+				int prodid = Integer.parseInt(productId);
+				if (prodid < 1) {
+					retVal = 1;
+					JOptionPane.showMessageDialog(this,
+							"Please enter a valid numerical value greater than zero for prod ID !! ");
+					return retVal;
+				}
+			}
+			if (quant != null && !"".equals(quant.trim())) {
+				int noOfItems = Integer.parseInt(productId);
+				if (noOfItems < 1) {
+					retVal = 1;
+					JOptionPane.showMessageDialog(this,
+							"Please enter a valid numerical value greater than zero for qunatity !! ");
+					return retVal;
+				}
+			}
+			if (customerId != null && !"".equals(customerId.trim()) && salesButton.isSelected()) {
+				int custid = Integer.parseInt(customerId);
+				if (custid < 1) {
+					retVal = 1;
+					JOptionPane.showMessageDialog(this,
+							"Please enter a valid numerical value greater than zero for Customer ID !! ");
+					return retVal;
+				}
+			}
+		} catch (NumberFormatException e) {
+			retVal = 1;
+			JOptionPane.showMessageDialog(this,
+					"Please enter a valid numerical value greater than zero for ID field !! ");
+			e.printStackTrace();
+		} catch (ParseException e) {
+			retVal = 1;
+			JOptionPane.showMessageDialog(this, "Please enter a valid Date value with format 'MM-dd-YYYY'!! ");
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+
+	private int valDel(String orderID) {
+		int retVal = 0;
+		try {
+			if (orderID == null || "".equals(orderID)) {
+				retVal = 1;
+				JOptionPane.showMessageDialog(this, "Please enter all the neccessary details !! ");
+				return retVal;
+			}
+			int id = Integer.parseInt(orderID);
+			if (id < 1) {
+				retVal = 1;
+				JOptionPane.showMessageDialog(this,
+						"Please enter a valid numerical value greater than zero for ID field !! ");
+			}
+		} catch (NumberFormatException e) {
+			retVal = 1;
+			JOptionPane.showMessageDialog(this,
+					"Please enter a valid numerical value greater than zero for ID field !! ");
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+
+	private void wipeFrame() {
+		orderIDField.setText(null);
+		dateField.setText(null);
+		productIDField.setText(null);
+		quantityField.setText(null);
+		customerIdlabel.setText(null);
 	}
 }
 
