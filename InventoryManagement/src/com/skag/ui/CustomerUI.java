@@ -97,6 +97,7 @@ class CustomerFrame extends JFrame implements ActionListener {
 			customerNameTextField.setEditable(true);
 			customerAdressField.setEditable(true);
 			customerContactField.setEditable(true);
+			customerIDField.setText(null);
 		} else if ("EDIT".equals(e.getActionCommand())) {
 			insertButton.setSelected(false);
 			deleteButton.setSelected(false);
@@ -111,6 +112,9 @@ class CustomerFrame extends JFrame implements ActionListener {
 			customerNameTextField.setEditable(false);
 			customerAdressField.setEditable(false);
 			customerContactField.setEditable(false);
+			customerNameTextField.setText(null);
+			customerAdressField.setText(null);
+			customerContactField.setText(null);
 		} else if ("To Dashboard".equals(e.getActionCommand())) {
 			this.dispose();
 			DashboardFrame df = new DashboardFrame();
@@ -126,7 +130,6 @@ class CustomerFrame extends JFrame implements ActionListener {
 					cust.setName(customerNameTextField.getText());
 					cust.setAddress(customerAdressField.getText());
 					cust.setContact(Long.parseLong((customerContactField.getText())));
-					//cust.setContact(new BigInteger(customerContactField.getText()));
 					int ret = cust.addCustomer();
 					if (ret == 1) {
 						JOptionPane.showMessageDialog(this, "Customer Added!");
@@ -151,7 +154,6 @@ class CustomerFrame extends JFrame implements ActionListener {
 									cust.setContact(0L);
 							else 
 								cust.setContact(Long.parseLong((customerContactField.getText())));
-								//cust.setContact(new BigInteger(customerContactField.getText()));
 						}
 						int ret = cust.modCustomer();
 						if (ret == 1) {

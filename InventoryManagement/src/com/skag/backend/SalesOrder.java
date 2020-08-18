@@ -1,11 +1,10 @@
 package com.skag.backend;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.sql.Date;
 
 public class SalesOrder {
 	private int id;
@@ -67,30 +66,51 @@ public class SalesOrder {
 		this.salePurchase = salePurchase;
 	}
 
+	SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+
 	public int addOrder() {
-		
 		try {
-			SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-			java.util.Date d= format.parse(date);
-			java.sql.Date dd = new Date(d.getTime());
+			java.sql.Date dd = new Date(format.parse(date).getTime());
 			String orderInsert = "INSERT INTO ORDER (orderDate, quantity, salesOrder, ProductID, CustomerID) VALUES ("
-					+ "#"+dd +"#" + "," + quantity + "," + salePurchase + "," + prodId + "," + custId + ")";
+					+ "#" + dd + "#" + "," + quantity + "," + salePurchase + "," + prodId + "," + custId + ")";
 			return new DBConnect().updtable(orderInsert);
 		} catch (ParseException e) {
-
 			e.printStackTrace();
+			return 1;
 		}
-		return 0; 
 	}
 
 	public int modOrder() {
 		String orderUpd = "UPDATE ORDER SET ";
-		if (prodId!=0 && custId!=0 && quantity!=0 && date!=null ) {
-			
+		try {
+			if (prodId != 0 && quantity != 0 && date != null) {
+				orderUpd = orderUpd + "orderDate = #" + new Date(format.parse(date).getTime()) + "# , ProductID = " + prodId
+						+ ", quantity = " + quantity;
+			} else if (prodId != 0 && quantity != 0) {
+				orderUpd = orderUpd + " ProductID = " + prodId + ", quantity = " + quantity;
+			} else if (prodId != 0 && date != null) {
+				orderUpd = orderUpd + "orderDate = #" + new Date(format.parse(date).getTime()) + "# , ProductID = " + prodId;
+			} else if (quantity != 0 && date != null) {
+				orderUpd = orderUpd + "orderDate = #" + new Date(format.parse(date).getTime()) + "# , quantity = "
+						+ quantity;
+			} else if (prodId != 0) {
+				orderUpd = orderUpd + " ProductID = " + prodId;
+			} else if (quantity != 0) {
+				orderUpd = orderUpd + " quantity = " + quantity;
+			} else if (date != null) {
+				orderUpd = orderUpd + "orderDate = #" + new Date(format.parse(date).getTime()) + "#";
+			}
+
+			if (salePurchase == 1 && custId != 0) {
+				orderUpd = orderUpd + (orderUpd.length() > 17 ? ", " : "") + "CustomerID =" + custId;
+			}
+
+			orderUpd = orderUpd + " WHERE ID=" + getId();
+			return new DBConnect().updtable(orderUpd);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return 1;
 		}
-			
-		orderUpd = orderUpd + " WHERE ID=" + getId();
-		return new DBConnect().updtable(orderUpd);
 	}
 
 	public int delOrder() {
@@ -101,8 +121,6 @@ public class SalesOrder {
 	public static SalesOrder getOrder(int id) {
 
 		SalesOrder order = new SalesOrder();
-		//String prodsel = "SELECT * FROM ORDER WHERE OrderDate=" + "FORMAT(#2020-08-05#, \"yyyy-MM-dd\")";
-		//String prodsel = "SELECT * FROM ORDER WHERE OrderDate=" + "#2020-08-05#";
 		String prodsel = "SELECT * FROM ORDER WHERE ID=" + id;
 		ResultSet rs = new DBConnect().select(prodsel);
 		try {

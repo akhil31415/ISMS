@@ -88,18 +88,22 @@ class ProductFrame extends JFrame implements ActionListener {
 			prodctIdField.setEditable(false);
 			productNameTextField.setEditable(true);
 			productPriceField.setEditable(true);
+			prodctIdField.setText(null);
 		} else if ("EDIT".equals(e.getActionCommand())) {
 			insertButton.setSelected(false);
 			deleteButton.setSelected(false);
 			prodctIdField.setEditable(true);
 			productNameTextField.setEditable(true);
 			productPriceField.setEditable(true);
+			prodctIdField.setText(null);
 		} else if ("DELETE".equals(e.getActionCommand())) {
 			insertButton.setSelected(false);
 			editButton.setSelected(false);
 			prodctIdField.setEditable(true);
 			productNameTextField.setEditable(false);
 			productPriceField.setEditable(false);
+			productNameTextField.setText(null);
+			productPriceField.setText(null);
 		} else if ("To Dashboard".equals(e.getActionCommand())) {
 			this.dispose();
 			DashboardFrame df = new DashboardFrame();

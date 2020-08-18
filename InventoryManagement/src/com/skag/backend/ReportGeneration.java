@@ -63,28 +63,20 @@ public class ReportGeneration {
 
 	private void fileprint(String filename, String[][] records) {
 
-		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-
-			bw.write(
-					"============================================================================================================\n");
-			bw.write("OrderID\t Date\t Product\t\t Quantity\t Cost\n");
-			bw.write(
-					"============================================================================================================\n");
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
+			bw.write("============================================================================================================\n");
+			bw.write("OrderID\t Date\t\t Product\t\t Quantity\t Cost\n");
+			bw.write("============================================================================================================\n");
 
 			for (int i = 0; i < 100; i++) {
 				if (records[i][0] == null)
 					break;
-				bw.write(records[i][0] + "\t " + records[i][1] + "\t " + records[i][2] + "\t\t " + records[i][3] + "\t "
+				bw.write(records[i][0] + "\t\t " + records[i][1] + "\t " + records[i][2] + "\t\t " + records[i][3] + "\t\t\t "
 						+ records[i][4]);
 				bw.newLine();
 			}
-
-			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			System.out.println("Report generation over");
 		}
 	}
 }
